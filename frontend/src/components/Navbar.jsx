@@ -1,4 +1,4 @@
-import { NavLink, useNavigate } from 'react-router'
+import { NavLink, useNavigate } from 'react-router-dom'
 import {assets} from '../assets/assets_frontend/assets'
 import { useState } from 'react';
 function Navbar() {
