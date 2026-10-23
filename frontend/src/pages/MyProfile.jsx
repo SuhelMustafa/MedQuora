@@ -30,15 +30,18 @@ function MyProfile() {
     setIsEdit(false);
   };
 
-  const inputClass = "bg-gray-100 rounded px-2 py-1 max-w-52 w-full";
+  // min-w-0 stops inputs from overflowing their grid column on small screens
+  const inputClass = "bg-gray-100 rounded px-2 py-1 w-full max-w-52 min-w-0";
+  const gridClass =
+    "grid grid-cols-[1fr_2fr] sm:grid-cols-[1fr_3fr] gap-x-2 gap-y-2.5 mt-3 text-neutral-700";
 
   return (
-    <div className="max-w-lg flex flex-col gap-2 text-sm">
+    <div className="w-full max-w-lg flex flex-col gap-2 text-sm">
       <img className="w-36 rounded" src={userData.image} alt="" />
 
       {isEdit ? (
         <input
-          className="bg-gray-50 text-3xl font-medium max-w-60 mt-4 px-2 py-1 rounded"
+          className="bg-gray-50 text-3xl font-medium w-full max-w-60 min-w-0 mt-4 px-2 py-1 rounded"
           type="text"
           value={userData.name}
           onChange={(e) =>
@@ -46,7 +49,7 @@ function MyProfile() {
           }
         />
       ) : (
-        <p className="font-medium text-3xl text-neutral-800 mt-4">
+        <p className="font-medium text-3xl text-neutral-800 mt-4 break-words">
           {userData.name}
         </p>
       )}
@@ -58,9 +61,9 @@ function MyProfile() {
         <p className="text-neutral-500 underline mt-3 uppercase">
           Contact information
         </p>
-        <div className="grid grid-cols-[1fr_3fr] gap-y-2.5 mt-3 text-neutral-700">
+        <div className={gridClass}>
           <p className="font-medium">Email id:</p>
-          <p className="text-blue-500">{userData.email}</p>
+          <p className="text-blue-500 break-all">{userData.email}</p>
 
           <p className="font-medium">Phone:</p>
           {isEdit ? (
@@ -78,7 +81,7 @@ function MyProfile() {
 
           <p className="font-medium">Address:</p>
           {isEdit ? (
-            <p>
+            <div className="min-w-0">
               <input
                 className={inputClass}
                 type="text"
@@ -90,7 +93,6 @@ function MyProfile() {
                   }))
                 }
               />
-              <br />
               <input
                 className={`${inputClass} mt-2`}
                 type="text"
@@ -102,7 +104,7 @@ function MyProfile() {
                   }))
                 }
               />
-            </p>
+            </div>
           ) : (
             <p className="text-gray-500">
               {userData.address.line1}
@@ -118,11 +120,11 @@ function MyProfile() {
         <p className="text-neutral-500 underline mt-3 uppercase">
           Basic information
         </p>
-        <div className="grid grid-cols-[1fr_3fr] gap-y-2.5 mt-3 text-neutral-700">
+        <div className={gridClass}>
           <p className="font-medium">Gender:</p>
           {isEdit ? (
             <select
-              className="max-w-24 bg-gray-100 rounded px-2 py-1"
+              className="w-full max-w-24 min-w-0 bg-gray-100 rounded px-2 py-1"
               value={userData.gender}
               onChange={(e) =>
                 setUserData((prev) => ({ ...prev, gender: e.target.value }))
@@ -139,7 +141,7 @@ function MyProfile() {
           <p className="font-medium">Birthday:</p>
           {isEdit ? (
             <input
-              className="max-w-36 bg-gray-100 rounded px-2 py-1"
+              className="w-full max-w-44 min-w-0 bg-gray-100 rounded px-2 py-1"
               type="date"
               value={userData.dob}
               onChange={(e) =>
@@ -153,7 +155,7 @@ function MyProfile() {
       </div>
 
       {/* buttons */}
-      <div className="mt-10">
+      <div className="mt-10 mb-6">
         {isEdit ? (
           <button
             onClick={handleSave}
