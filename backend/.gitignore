@@ -1,0 +1,34 @@
+# Environment Variables & Secrets (CRITICAL)
+# ==========================================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.pem
+*.key
+*.cert
+*.pfx
+
+# ==========================================
+# Node.js / Express / NestJS
+# ==========================================
+node_modules/
+/dist
+/build
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.eslintcache
+
+# Local Databases & Storage
+# ==========================================
+*.db
+*.sqlite
+*.sqlite3
+*.sqlite3-journal
+uploads/
+storage/
+/logs
+*.log
