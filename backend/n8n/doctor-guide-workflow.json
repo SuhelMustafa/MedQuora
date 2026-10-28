@@ -1,0 +1,52 @@
+{
+  "name": "MedQuora Doctor Guide",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "medquora-doctor-guide",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "43172e56-7c9e-42ea-87dd-7310a9be3011",
+      "name": "Doctor guide request",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "medquora-doctor-guide"
+    },
+    {
+      "parameters": {
+        "jsCode": "const request = $input.first().json.body ?? $input.first().json;\nconst message = String(request.message ?? '').trim();\nconst text = message.toLowerCase();\nconst available = Array.isArray(request.specialties) ? request.specialties : [];\nconst routes = [\n  { specialty: 'Dermatologist', words: ['skin', 'rash', 'acne', 'eczema', 'mole', 'itch'] },\n  { specialty: 'Gynecologist', words: ['period', 'menstrual', 'pregnan', 'gynec', 'ovarian', 'vaginal'] },\n  { specialty: 'Pediatricians', words: ['child', 'children', 'baby', 'infant', 'toddler', 'pediatric'] },\n  { specialty: 'Gastroenterologist', words: ['stomach', 'digest', 'abdominal', 'bowel', 'constipat', 'diarrh', 'heartburn'] },\n  { specialty: 'Neurologist', words: ['headache', 'migraine', 'seizure', 'numbness', 'tingling', 'neurolog'] },\n  { specialty: 'General physician', words: ['fever', 'cold', 'cough', 'fatigue', 'general', 'checkup', 'check-up'] },\n];\nconst selected = routes.find(route => available.includes(route.specialty) && route.words.some(word => text.includes(word)));\nlet reply;\nlet recommendedSpecialties = [];\nif (!message) {\n  reply = 'Tell me what kind of care you are looking for, and I can help you find a relevant doctor specialty.';\n} else if (selected) {\n  recommendedSpecialties = [selected.specialty];\n  reply = `For concerns like the one you described, you could consider speaking with a ${selected.specialty}. This is general directory guidance, not a diagnosis; a qualified clinician can assess your specific situation.`;\n} else {\n  const fallback = available.includes('General physician') ? 'General physician' : null;\n  if (fallback) recommendedSpecialties = [fallback];\n  reply = 'I could not confidently match that concern to a specialty in this directory. A general physician can often help you decide where to start. This tool does not diagnose conditions.';\n}\nreturn [{ json: { reply, recommendedSpecialties } }];"
+      },
+      "id": "79cbe7c7-3d95-4447-848a-94ce2bf68f0d",
+      "name": "Suggest a specialty",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [480, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "51249cf7-0d74-430e-88fd-c3376b91873a",
+      "name": "Return guidance",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [720, 300]
+    }
+  ],
+  "connections": {
+    "Doctor guide request": {
+      "main": [[{ "node": "Suggest a specialty", "type": "main", "index": 0 }]]
+    },
+    "Suggest a specialty": {
+      "main": [[{ "node": "Return guidance", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "versionId": "39a6a67d-3d9d-4d07-8c4d-2abf61cd0e01"
+}

@@ -17,6 +17,7 @@ import AdminDoctorList from "./pages/AdminDoctorList";
 import DoctorDashboard from "./pages/DoctorDashboard";
 import DoctorAppointments from "./pages/DoctorAppointments";
 import DoctorProfile from "./pages/DoctorProfile";
+import DoctorGuide from "./pages/DoctorGuide";
 
 function App() {
   const pageContainer = "mx-auto w-full max-w-[1440px] px-4 sm:px-6 lg:px-8";
@@ -47,6 +48,14 @@ function App() {
           element={
             <div className={pageContainer}>
               <Doctors />
+            </div>
+          }
+        />
+        <Route
+          path="/doctor-guide"
+          element={
+            <div className={pageContainer}>
+              <DoctorGuide />
             </div>
           }
         />
